@@ -1,9 +1,8 @@
 import React from "react";
-import "./App.css";
 import { useState, useEffect } from "react";
 import ReactMapGL, { Marker } from "react-map-gl";
-const TOKEN =
-  "pk.eyJ1IjoibWFyY2Vsb3RyYWphbm8iLCJhIjoiY2tmem05cHpwMXlsbTJ6cDlnaWY5dzR2bSJ9.7F7O_Onlh5gVxa8vz2FIuA";
+import { getLocations } from "./api/Api";
+import Location from "./components/Location";
 
 function App() {
   const [locations, setLocations] = useState([]);
@@ -18,28 +17,30 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch("http://localhost:8787/api/logs");
-      const data = await res.json();
-
+      const data = await getLocations();
       setLocations(data);
     })();
   }, []);
 
+  console.log(process.env.MAPBOX_API_ACCESS_TOKEN);
+
   return (
     <ReactMapGL
-      mapStyle="mapbox://styles/marcelotrajano/ckfzol8hj1h3y19nznrlp55z3"
-      mapboxApiAccessToken={TOKEN}
+      mapboxApiAccessToken={process.env.MAPBOX_API_ACCESS_TOKEN}
       {...viewport}
       onViewportChange={(nextViewport) => setViewport(nextViewport)}
     >
-      <Marker
-        latitude={latitude}
-        longitude={longitude}
-        offsetLeft={-20}
-        offsetTop={-10}
-      >
-        <div className="marker">You are here</div>
-      </Marker>
+      {locations.map((location) => (
+        <Marker
+          key={location._id}
+          latitude={location.latitude}
+          longitude={location.longitude}
+          offsetLeft={-20}
+          offsetTop={-10}
+        >
+          <Location location={location} />
+        </Marker>
+      ))}
     </ReactMapGL>
   );
 }

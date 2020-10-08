@@ -1,0 +1,38 @@
+.marker {
+  display: flex;
+  flex-direction: column;
+  background-color: darkgreen;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.marker-title {
+  font-weight: bold;
+  color: white;
+  font-size: 15px;
+}
+.marker-desc {
+  color: white;
+  font-size: 12px;
+}
+
+.marker-visitDate {
+  color: white;
+  font-size: 12px;
+}
+
+.marker-Rating {
+  color: white;
+  font-size: 12px;
+}
+
+.marker-img {
+  display: flex;
+  justify-content: center;
+}
+
+img {
+  width: 100px;
+  height: 100px;
+  border-radius: 15px;
+}
