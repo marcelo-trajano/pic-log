@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const middleware = require("./middleware");
 const LogEntry = require("./models/LogEntry");
+const logsRouter = require("./api/logs");
+
 const app = express();
 
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
@@ -13,38 +15,11 @@ mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 app.use(morgan("common"));
 app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  LogEntry.create({
-    title: "I am here",
-    description: "this place is good",
-    comments: "heello",
-    image: "www.imag.com",
-    rating: 4,
-    latitude: 25.5,
-    longetude: 22.2,
-    visitDate: Date.now(),
-  });
+app.get("/", async (req, res, next) => {});
 
-  res.json({ message: "access denied!" });
-});
-
-app.get("/:id", (req, res) => {
-  console.log(req.params.id);
-
-  //const id = ;
-
-  //const data = LogEntry.findById(id).exec();
-
-  res.json({});
-});
-
-app.get("/logs", async (req, res) => {
-  console.log(req);
-  const data = await LogEntry.find();
-
-  res.json(data);
-});
+app.use("/api/logs", logsRouter);
 
 app.use(middleware.notFound);
 
